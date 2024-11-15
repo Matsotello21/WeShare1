@@ -50,3 +50,8 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: /ecs/hello-server
+
+Outputs:
+  ECSTaskDefinition:
+    Description: The created TaskDefinition.
+    Value: !Ref rTaskDefinition
