@@ -54,8 +54,8 @@ rTaskDefinition:
             awslogs-group: /ecs/hello-server
             awslogs-region: eu-west-1
             awslogs-stream-prefix: ecs
-      Family: hello-server
+      Family: hello server
       NetworkMode: bridge
       Memory: 256
       RequiresCompatibilities:
-          - EC2
+            - EC2
