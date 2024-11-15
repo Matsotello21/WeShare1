@@ -88,3 +88,67 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: /codebuild/hello-server
+
+
+  rCodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+                - codebuild.amazonaws.com
+                - ecs-tasks.amazonaws.com
+              Action:
+                - sts:AssumeRole
+  Description: Permission to execute AWS CodePipeline
+  ManagedPolicyArns:
+    - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser
+  Policies:
+    - PolicyName: pipeline-policy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCodeCommitActions
+            Effect: 'Allow'
+            Action:
+              - 'codecommit:UploadArchive'
+              - 'codecommit:GetCommit'
+              - 'codecommit:GetBranch'
+              - 'codecommit:GitPull'
+              - 'codecommit:GetUploadArchiveStatus'
+            Resource:
+              - !GetAtt rCodeCommitRepository.Arn
+          - Sid: AllowS3Actions
+            Effect: 'Allow'
+            Action:
+                - 'codecommit:UploadArchive'
+                - 's3:PutObject'
+                - 's3:GetObject'
+            Resource:
+              - !Sub 'arn:aws:s3:::${rS3ArtifactBucket}'
+              - !Sub 'arn:aws:s3:::${rS3ArtifactBucket}/*'
+            - Sid: AllowCodeBuildActions
+              Effect: 'Allow'
+              Action:
+                - 'codebuild:StartBuild'
+                - 'codebuild:BatchGetBuilds'
+            Resource:
+                - '*'
+            - Sid: AllowCodeDeployActions
+              Effect: 'Allow'
+              Action:
+                - 'ecs:*'
+            Resource:
+                - '*'
+            - Sid: AllowCWLogsActions
+              Effect: 'Allow'
+              Action:
+                - 'logs:CreateLogStream'
+                - 'logs:CreateLogGroup'
+                - 'logs:PutLogEvents'
+            Resource:
+              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:codebuild/hello
