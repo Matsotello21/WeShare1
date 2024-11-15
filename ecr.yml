@@ -32,7 +32,7 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Name: hello-server
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server
+          Image:  ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server
           PortMappings:
             - ContainerPort: 80
               HostPort: 80
@@ -61,7 +61,7 @@ Resources:
       HealthyThresholdCount: 2
       Port: 80
       Protocol: HTTP
-      VpcId: !Sub '{{resolve:ssm:vpc}}'
+      VpcId: '{{resolve:ssm:vpc}}'
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: '5'
@@ -77,7 +77,7 @@ Resources:
           PathPatternConfig:
             Values:
               - "/hello/*"
-      ListenerArn: !Sub '{{resolve:ssm:public-lb-listener}}'
+      ListenerArn: '{{resolve:ssm:public-lb-listener}}'
       Priority: 10
 
   rCodeBuildLogGroup:
@@ -116,7 +116,7 @@ Resources:
                   - 'codecommit:GitPull'
                   - 'codecommit:GetUploadArchiveStatus'
                 Resource:
-                  - !GetAtt rCodeCommitRepository.Arn
+                  - !GetAtt rECRRepo.Arn
               - Sid: AllowS3Actions
                 Effect: 'Allow'
                 Action:
@@ -124,8 +124,8 @@ Resources:
                   - 's3:PutObject'
                   - 's3:GetObject'
                 Resource:
-                  - !Sub 'arn:aws:s3:::${rS3ArtifactBucket}'
-                  - !Sub 'arn:aws:s3:::${rS3ArtifactBucket}/*'
+                  -  'arn:aws:s3:::${rS3ArtifactBucket}'
+                  -  'arn:aws:s3:::${rS3ArtifactBucket}/*'
               - Sid: AllowCodeBuildActions
                 Effect: 'Allow'
                 Action:
@@ -146,4 +146,4 @@ Resources:
                   - 'logs:CreateLogGroup'
                   - 'logs:PutLogEvents'
                 Resource:
-                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:codebuild/hello'
+                  -  'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:codebuild/hello'
