@@ -58,4 +58,4 @@ rTaskDefinition:
       NetworkMode: bridge
       Memory: 256
       RequiresCompatibilities:
-           - EC2
+          - EC2
