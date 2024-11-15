@@ -23,3 +23,9 @@ Outputs:
     Value: !GetAtt rECRRepo.RepositoryUri
     Export:
       Name: ECRRepoURI
+
+
+  rECSLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/hello-server
