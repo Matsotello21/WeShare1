@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  This template creates an Amazon Elastic Container Registry (ECR) repository
+  to host the Docker image.
+
+Resources:
+  rECRRepo:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: hello-server
+  
+  rECRRepoParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Description: ECR Repository
+      Name: ecr-repo-name
+      Type: String
+      Value: !Ref rECRRepo
+
+Outputs:
+  ECRRepositoryUri:
+    Description: URI of the created ECR repository
+    Value: !GetAtt rECRRepo.RepositoryUri
+    Export:
+      Name: ECRRepoURI
