@@ -51,23 +51,23 @@ Resources:
     Properties:
       LogGroupName: /ecs/hello-server
 
+  rTargetGroup:  # Moved this into the Resources section
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: hello-server-tg
+      TargetType: instance
+      HealthCheckIntervalSeconds: 5
+      HealthCheckPath: /ping
+      HealthCheckTimeoutSeconds: 3
+      HealthyThresholdCount: 2
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Sub '{{resolve:ssm:vpc}}'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '5'
+
 Outputs:
   ECSTaskDefinition:
     Description: The created TaskDefinition.
     Value: !Ref rTaskDefinition
-
-rTargetGroup:
-  Type: AWS::ElasticLoadBalancingV2::TargetGroup
-  Properties:
-    Name: hello-server-tg
-    TargetType: instance
-    HealthCheckIntervalSeconds: 5
-    HealthCheckPath: /ping
-    HealthCheckTimeoutSeconds: 3
-    HealthyThresholdCount: 2
-    Port: 80
-    Protocol: HTTP
-    VpcId: !Sub '{{resolve:ssm:vpc}}'
-    TargetGroupAttributes:
-      - Key: deregistration_delay.timeout_seconds
-        Value: '5'
