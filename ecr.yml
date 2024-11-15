@@ -28,7 +28,7 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Name: hello-server
-          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server'
+          Image:  '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server'
           PortMappings:
             - ContainerPort: 80
               HostPort: 80
@@ -62,7 +62,7 @@ Resources:
       HealthyThresholdCount: 2
       Port: 80
       Protocol: HTTP
-      VpcId: !Sub '{{resolve:ssm:vpc}}'
+      VpcId:  '{{resolve:ssm:vpc}}'
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
           Value: '5'
