@@ -1,16 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
 ################################################################################
 #
-#
 # DESCRIPTION
 #
-##############################################################################
 ################################################################################
-#
+################################################################################
 #
 # RESOURCES
 #
-##############################################################################
+################################################################################
 Resources:
   rECRRepo:
     Type: AWS::ECR::Repository
@@ -30,7 +28,7 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Name: hello-server
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server
+          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/hello-server'
           PortMappings:
             - ContainerPort: 80
               HostPort: 80
@@ -42,21 +40,13 @@ Resources:
               awslogs-group: /ecs/hello-server
               awslogs-region: eu-west-1
               awslogs-stream-prefix: ecs
-        Family: hello-server
-        NetworkMode: bridge
-        Memory: 256
-        RequiresCompatibilities:
-              - EC2
-###############################################################################
-#
-#
-# OUTPUTS
-#
-###############################################################################
+      Family: hello-server
+      NetworkMode: bridge
+      Memory: 256
+      RequiresCompatibilities:
+        - EC2
 
   rECSLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: /ecs/hello-server
-
-
